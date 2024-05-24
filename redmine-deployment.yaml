@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redmine
+spec:
+  selector:
+    matchLabels:
+      app: redmine
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redmine
+    spec:
+      containers:
+      - name: redmine
+        image: redmine:latest
+        ports:
+        - containerPort: 3000
+          name: redmine
+        env:
+        - name: REDMINE_DB_MYSQL
+          value: mysql
+        - name: REDMINE_DB_DATABASE
+          value: redmine
+        - name: REDMINE_DB_USERNAME
+          value: root
+        - name: REDMINE_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: super-secret
+              key: mysqlpd
+        volumeMounts:
+        - name: redmine-pvc
+          mountPath: /usr/src/redmine/files
+      volumes:
+      - name: redmine-pvc
+        persistentVolumeClaim:
+           claimName: redmine-pvc
