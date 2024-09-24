@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  nodeSelector: 
+     disk: ssd
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+  tolerations: 
+    - key: env
+      operator: "Exists"
+      value: prod 
+      effect: "NoSchedule"
+ #   - key: "key1"
+ #     operator: "Equal"
+ #     value: "value1"
+ #     effect: "NoSchedule"
+ #    - key: "key1"
+ #      operator: "Equal"
+ #      value: "value1"
+ #      effect: "NoExecute"
+
+ 
