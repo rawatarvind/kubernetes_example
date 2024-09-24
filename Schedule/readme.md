@@ -65,7 +65,7 @@ how  to assign labels on nodes ?
  kubectl taint node node2 disk=ssd:PreferSchedule-
  kubectl taint node node3 env=test:NoExecute-
 
-# Node affinity weight
+ **Node affinity weight**
 
 we can specify a wight 1 and 100 for each instance of the preferredDuringSchedulingIgnoredDuringExecution affinity type.
 If there are two possible nodes that match the preferredDuringSchedulingIgnoredDuringExecution rule, one with the label-1:key-1 label and another with the label-2:key-2 label, the scheduler considers the weight of each node and adds the weight to the other scores for that node, and schedules the Pod onto the node with the highest final score.
@@ -74,5 +74,18 @@ If there are two possible nodes that match the preferredDuringSchedulingIgnoredD
 
 **referredDuringSchedulingIgnoredDuringExecution****: The Scheduler tries to find node that meets the rule. if a matching node is not available, the scheduler still 
 schedules the Pod.
+
+
+**Pod affinity example**
+
+you could use requiredDuringSchedulingIgnoredDuringExecution affinity to tell the scheduler to co-locate Pods of two services in the same cloud provider zone because they communicate with each other a lot. Similarly, you could use preferredDuringSchedulingIgnoredDuringExecution anti-affinity to spread Pods from a service across multiple cloud provider zones.
+
+
+Note:
+Pod anti-affinity requires nodes to be consistently labeled, in other words, every node in the cluster must have an appropriate label matching topologyKey. If some or all nodes are missing the specified topologyKey label, it can lead to unintended behavior.
+
+You express the topology domain (X) using a topologyKey, which is the key for the node label that the system uses to denote the domain.
+
+
 
 
