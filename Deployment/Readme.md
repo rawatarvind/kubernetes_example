@@ -1,4 +1,4 @@
-                                              # Deployment 
+ # Deployment 
 
 
 what is Deployment ?
@@ -56,3 +56,4 @@ In a Shadow Deployment strategy, the new version of the application is deployed 
 A/B Testing involves deploying multiple versions of an application and directing different subsets of users or traffic to each version. This strategy allows for a direct comparison of the performance and user experience between different versions. A/B testing is beneficial for making data-driven decisions about which version performs better based on user feedback and metrics.
 
 The wide array of Kubernetes deployment strategies offers diverse approaches to cater to different application requirements, ensuring smooth updates and minimal downtime. Each strategy has its own merits and suitability depending on factors such as application criticality, traffic patterns, and user expectations. By choosing the appropriate strategy, organizations can achieve seamless deployment processes and deliver the best user experience.
+
