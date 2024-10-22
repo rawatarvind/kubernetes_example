@@ -1,4 +1,4 @@
-     Role Based Access control (RBAC) 
+    # Role Based Access control (RBAC) 
 
 
 RBAC is method of regulating access to computer or network resources based on the roles of individual user within your organization.
@@ -7,7 +7,7 @@ RBAC is method of regulating access to computer or network resources based on th
 RBAC API declares four kind of kubenetes objects: Role, ClusterRole, Rolebinding, Clusterrolebinding.
 
 
-Role and ClusterRole 
+**Role and ClusterRole** 
 
 
 An RBAC Role or ClusterRole contains the rules that represent set of permissions.
@@ -55,7 +55,7 @@ rules:
 resources: ["secrets"]  
 verbs: ["get", "watch", "list"]
 
-RoleBinding and ClusterRoleBinding
+**RoleBinding and ClusterRoleBinding**
 
 A Role binding grants the permission defines in a role a user or set of users.
 It holds a list of subjects (user, groups or service accounts).
@@ -64,14 +64,14 @@ A RoleBinding grants the permission within a specific namespace whereas clusterr
 
 
 
-RoleBinding examples
+**RoleBinding examples**
 
 Here is an example of a RoleBinding that grants the "pod-reader" Role to the user "jane" within the "default" namespace. This allows "jane" to read pods in the "default" namespace.
 
 
 apiVersion: rbac.authorization.k8s.io/v1
-# This role binding allows "jane" to read pods in the "default" namespace.
-# You need to already have a Role named "pod-reader" in that namespace.
+## This role binding allows "jane" to read pods in the "default" namespace.
+## You need to already have a Role named "pod-reader" in that namespace.
 kind: RoleBinding
 metadata:  
 name: read-pods  
@@ -86,13 +86,13 @@ apiGroup: rbac.authorization.k8s.io
 
 
 
-ClusterRoleBinding example
+**ClusterRoleBinding example**
 
 To grant permissions across a whole cluster, you can use a ClusterRoleBinding. The following ClusterRoleBinding allows any user in the group "manager" to read secrets in any namespace.
 
 
 apiVersion: rbac.authorization.k8s.io/v1
-# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+## This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
 kind: ClusterRoleBinding
 metadata:  
 name: read-secrets-global
@@ -108,25 +108,25 @@ apiGroup: rbac.authorization.k8s.io
 
 
 
-Command-line utilities
+# **Command-line utilities**
 
 
 kubectl create role
 
 Creates a Role object defining permissions within a single namespace. Examples:
 
-1.Create a Role named "pod-reader" that allows users to perform get, watch and list on pods:
+**1.**Create a Role named "pod-reader" that allows users to perform get, watch and list on pods:
 
 Kubectl create role pod-reader  --verb=get, watch, list --resource=pods
 
 
-2.Create a Role named "pod-reader" with resourceNames specified:
+**2.**Create a Role named "pod-reader" with resourceNames specified:
 
 Kubectl create role pod-reaeder --verb=get --resource=pods  --resource-name=readablepod --resource-name=anotherpod
 
-3.Create a Role named "foo" with apiGroups specified:
+**3.**Create a Role named "foo" with apiGroups specified:
 Kubectl create role foo --verb=list,watch,get --resource=replicasets.apps
-4.Create a Role named "foo" with subresource permissions:
+**4.**Create a Role named "foo" with subresource permissions:
 Kubectl create role foo --verb=list,watch,get --resource=pod,	pods/status
 
 kubectl create clusterrole
@@ -185,37 +185,37 @@ Kubectl create clusterrolebinding view-clusterrole-binding --clusterrole=view --
 Create or Generate key for user .
 
 
-# openssl genrsa -out sarvind.key 2048
+## openssl genrsa -out sarvind.key 2048
 
-# openssl req -new -key sarvind.key 	-out sarvind.csr -sub “/CN=sarvind/O=dev/O=example.org”
+## openssl req -new -key sarvind.key 	-out sarvind.csr -sub “/CN=sarvind/O=dev/O=example.org”
 
-# openssl x509 -req -in sarvind.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out sarvind.crt -days 730
+## openssl x509 -req -in sarvind.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out sarvind.crt -days 730
 
 O represent to groups.
 
-# openssl x509 -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -days 730 -in sarvind.csr -out sarvind.crt
+## openssl x509 -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -days 730 -in sarvind.csr -out sarvind.crt
 
-# kubectl config set-credentials sarvind --client-certificate=sarvind.crt  cleint-key=sarvind.key
+## kubectl config set-credentials sarvind --client-certificate=sarvind.crt  cleint-key=sarvind.key
 
-# kubectl config get-contexts
+## kubectl config get-contexts
 
-# kubectl config set-context sarvind-minikube --cluster=minikube --user=sarvind
+## kubectl config set-context sarvind-minikube --cluster=minikube --user=sarvind
 
-# kubectl config get-contexts
-# kubectl use-context minikube
+## kubectl config get-contexts
+## kubectl use-context minikube
 
-# kubectl get pod 
+## kubectl get pod 
 
-How to get Verbs in kubernetes of perticulare resource.
+**How to get Verbs in kubernetes of perticulare resource.**
 
 
-# kubectl api-resources  -o wide  | grep pod 
+## kubectl api-resources  -o wide  | grep pod 
 
-# kubectl auth can-i list pods --namespace default --as sarvind
+## kubectl auth can-i list pods --namespace default --as sarvind
 
-# kubectl auth can-i delete pods --namespace default -as sarvind
+## kubectl auth can-i delete pods --namespace default -as sarvind
 
-# kubectl config view --minify 
+## kubectl config view --minify 
 
 
 
