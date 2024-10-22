@@ -27,3 +27,4 @@ spec:
   containers:
   - name: with-pod-affinity
     image: nginx
+    
