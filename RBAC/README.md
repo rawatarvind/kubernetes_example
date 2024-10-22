@@ -225,3 +225,18 @@ kubectl api-resources  -o wide  | grep pod
 
 
 
+# Service Accounts:
+
+
+Service Accounts are special types of users.
+You can call them as application users.
+When namespace is created default service account is also created in every namespaces.
+Pods where our applications are run used these default  service accounts to authentication themeself  to  API server.
+
+If you don’t explicitly mention  what service accounts  will be  used then all pods use the default service account.
+
+we can also create custom service account in namespace.
+
+Kubectl create sa test-sa -n test
+
+Kubectl get sa -n test
