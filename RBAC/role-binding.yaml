@@ -9,6 +9,8 @@ subjects:
      # You can specify more than one "subject"
    - kind: User
      name: sarvind # "name" is case sensitive
+   - kind: ServiceAccount
+     name: test-sa
      apiGroup: rbac.authorization.k8s.io
 roleRef:
       # "roleRef" specifies the binding to a Role / ClusterRole

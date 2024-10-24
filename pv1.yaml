@@ -1,17 +1,16 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mongo-pv
+  name: mongo-pv-1
 spec:
   capacity:
-    storage: 3Gi
-  volumeMode: Filesystem
+    storage: 3Gi  # Or any suitable size
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
   storageClassName: local-mongo
   local:
-    path: /mnt
+    path: /mnt/Data/vol  # Update the path if needed
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -20,3 +19,4 @@ spec:
           operator: In
           values:
           - minikube
+

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redmine-pvc
+  name: mongo-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -9,5 +9,4 @@ spec:
   resources:
     requests:
       storage: 3Gi
-  storageClassName: local-redmine
-~                                     
+  storageClassName: local-mongo
