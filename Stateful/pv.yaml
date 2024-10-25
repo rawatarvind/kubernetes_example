@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    hostPathProvisionerIdentity: 7783303b-aaa6-4979-a18f-38bfeb886885
+    pv.kubernetes.io/provisioned-by: k8s.io/minikube-hostpath
+  creationTimestamp: "2024-10-25T07:08:10Z"
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: pvc-875ef0f9-a7f3-435f-a6e8-2899b99c7e7b
+  resourceVersion: "250133"
+  uid: 2f134a35-f2d5-4384-a048-1918ee3e829f
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: mongo-volume-mongo-1
+    namespace: default
+    resourceVersion: "250123"
+    uid: 875ef0f9-a7f3-435f-a6e8-2899b99c7e7b
+  hostPath:
+    path: /tmp/hostpath-provisioner/default/mongo-volume-mongo-1
+    type: ""
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: standard
+  volumeMode: Filesystem
+status:
+  lastPhaseTransitionTime: "2024-10-25T07:08:10Z"
+  phase: Bound
