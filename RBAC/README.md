@@ -4,7 +4,7 @@
 RBAC is method of regulating access to computer or network resources based on the roles of individual user within your organization.
 
 
-RBAC API declares four kind of kubenetes objects: Role, ClusterRole, Rolebinding, Clusterrolebinding.
+RBAC API declares four kind of kubernetes objects: Role, ClusterRole, Rolebinding, Clusterrolebinding.
 
 
 **Role and ClusterRole** 
@@ -20,7 +20,7 @@ ClusterRole has several uses. You can use a ClusterRole to;
 
 1.Define the permission on namespaced resources and be granted to access within individual namespace.
 2.Define permission on namespaced resourced and be granted to access across the all namespaces.
-3.Define permission on cluste-scoped resources.
+3.Define permission on cluster-scoped resources.
 
 If your want to define role within namespace then use Role,and if you want to define role cluster-wide then use Clusterrole.
 

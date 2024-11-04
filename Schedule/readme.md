@@ -15,7 +15,7 @@ we can schedule pods in   different ways.
 3. Taint & toleration
 4. Affinity & Anti-affinity
 
-**nodeName**:- this is  the easyest way to schedule the pod on nodes.
+**nodeName**:- this is  the easiest way to schedule the pod on nodes.
 
 **nodeSelector**:-  nodeSelector is used to schedule the pod over nodes on basis of selector labels.
 
@@ -24,14 +24,14 @@ we can schedule pods in   different ways.
 
 there are three type of taint & toleration.
 
-a) N**oSchedul**e:- can't be scheduled if they can't have toleration.
+a) **NoSchedule**:- can't be scheduled if they can't have toleration.
 
 b) **PreferSchedule**:- can be scheduled if they can't have toleration.
 
 c) **NoExecute** :- delete existing pods if they don't have toleration.
 
 
-**Affinity & Anti-affinity**:- affinity is also used to schedule the pod over nodes it's alternative of nodeselector with advance option like (lt,Exist,in, etc)
+**Affinity & Anti-affinity**:- affinity is also used to schedule the pod over nodes it's alternative of nodeSelector with advance option like (lt,Exist,in, etc)
 
 there two type of Affinity .
 
@@ -39,7 +39,7 @@ a) **Node Affinity** :- node affinity is used to schedule the pod over node
 
 b) **Pod Affinity** :- pod affinity is used to co-locate the pod with pod  topologyKey.
 
-**Anti-affinity**:- anti-affinity is used to voice-versa of anti-affinity.
+**Anti-affinity**:- anti-affinity is used to voice-versa of pod-affinity.
 
 how  to assign labels on nodes ?
 

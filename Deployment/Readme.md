@@ -13,8 +13,8 @@ Deployment can help to scale the number of replicas pods
 **1. Rolling Deployment**
 
 A Rolling Deployment allows you to updating of the application by incrementally replacing old instances  to new ones.
-this approch ensures the minimal downtime to while introduce the new pods .
-once you do roll update in application, it terminate all previous version.
+this approach ensures the minimal downtime to while introduce the new pods .
+once you do roll update in application, it terminates all previous version.
 Rolling deployments are ideal for applications that require high availability and continuous operations
 
 **2. Recreate Deployment**
@@ -25,20 +25,20 @@ this approach  creates brief period of downtime as application is unavailable du
 
 **3. Ramped Slow Rollout**
 
-The Ramped Slow Rollout strategy gradually ramps up the new version of an application by gradually increasing the percentage of traffic it receives. This approach allows for early detection of issues and provides a controlled way to monitor the performance of the new version. Ramped slow rollouts are beneficial for applications that require careful monitoring and verification before fully rolling out the update.
+The Ramped Slow Rollout strategy gradually ramps up the new version of an application by gradually increasing the percentage of traffic it receives. This approach allows for early detection of issues and provides a controlled way to monitor the performance of the new version. Ramped slow rollout are beneficial for applications that require careful monitoring and verification before fully rolling out the update.
 
-**4. Best-Effort Controllled Rollout**
+**4. Best-Effort Controlled Rollout**
 
 Best-Effort Controlled Rollout strategy allows  fine-grain control over Deployment process. it enables the operator to specify the desire number or percentage 
-of  pods to be updated at the given time. this approch provides flexibility while maintaining control over the updating process, making it suitable for complex 
+of  pods to be updated at the given time. this approach provides flexibility while maintaining control over the updating process, making it suitable for complex 
 applications with specific deployment requirements.
 
 **5. Blue/Green Deployment**
 
-Blue/Green Deployment strategy involves  mantaining  two identical environments,
-one refered as blue (production environment) and the Green (new version deployment environment).
+Blue/Green Deployment strategy involves  maintaining  two identical environments,
+one referred as blue (production environment) and the Green (new version deployment environment).
 The new version deployment application tested then move to traffic Green environment.
-this approach allows you to  rollback if there is any issue occured.
+this approach allows you to  rollback if there is any issue occurred.
 
 **6. Canary Deployment**  
 
