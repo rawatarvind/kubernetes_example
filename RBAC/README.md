@@ -212,7 +212,7 @@ O represent to groups.
 
  kubectl get pod 
 
-**How to get Verbs in kubernetes of perticulare resource.**
+**How to get Verbs in kubernetes of perticular resource.**
 
 
 kubectl api-resources  -o wide  | grep pod 
