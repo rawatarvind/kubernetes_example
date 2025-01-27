@@ -113,62 +113,68 @@ apiGroup: rbac.authorization.k8s.io
 # **Command-line utilities**
 
 
-kubectl create role
+        kubectl create role
 
 Creates a Role object defining permissions within a single namespace. Examples:
 
 **1.**Create a Role named "pod-reader" that allows users to perform get, watch and list on pods:
 
-Kubectl create role pod-reader  --verb=get, watch, list --resource=pods
+      Kubectl create role pod-reader  --verb=get, watch, list --resource=pods
 
 
 **2.**Create a Role named "pod-reader" with resourceNames specified:
 
-Kubectl create role pod-reaeder --verb=get --resource=pods  --resource-name=readablepod --resource-name=anotherpod
+      Kubectl create role pod-reaeder --verb=get --resource=pods  --resource-name=readablepod --resource-name=anotherpod
 
 **3.**Create a Role named "foo" with apiGroups specified:
-Kubectl create role foo --verb=list,watch,get --resource=replicasets.apps
-**4.**Create a Role named "foo" with subresource permissions:
-Kubectl create role foo --verb=list,watch,get --resource=pod,	pods/status
 
-kubectl create clusterrole
+     Kubectl create role foo --verb=list,watch,get --resource=replicasets.apps
+
+**4.**Create a Role named "foo" with subresource permissions:
+ 
+     Kubectl create role foo --verb=list,watch,get --resource=pod,	pods/status
+
+     kubectl create clusterrole
 
 1.Create a ClusterRole named "pod-reader" that allows user to perform get, watch and list on pods:
 
-Kubectl create clusterrole pod-reader --verb=list,watch,get  --resource=pods
+    Kubectl create clusterrole pod-reader --verb=list,watch,get  --resource=pods
 2.Create a ClusterRole named "pod-reader" with resourceNames specified:
 
-Kubectl create clusterrole pod-reader --ver=list,watch,get --resource=pod --resource-name=readablepod --resourece-name=anotherpod
+    Kubectl create clusterrole pod-reader --ver=list,watch,get --resource=pod --resource-name=readablepod --resourece-name=anotherpod
 
 3.Create a ClusterRole named "foo" with apiGroups specified:
-Kubectle create clusterrole foo --verb=list,watch,get --resouce=replicasets.apps
+   
+    Kubectle create clusterrole foo --verb=list,watch,get --resouce=replicasets.apps
 
 4.Create a ClusterRole named "foo" with subresource permissions:
 
-Kubectle create clusterrole foo --verb=list,watch,get --resource=pods,pods/status 
+    Kubectle create clusterrole foo --verb=list,watch,get --resource=pods,pods/status 
+
 5.Create a ClusterRole named "foo" with nonResourceURL specified:
 
-Kubectl create clusterrole foo --verb=list --non-resource-url=/log/*
+    Kubectl create clusterrole foo --verb=list --non-resource-url=/log/*
 
 5.Create a ClusterRole named "monitoring" with an aggregationRule specified:
-Kubectl create clusterrole monitoring --aggregation-rule="rbac.example.com/aggregate-to-monitoring=true"
 
-kubectl create rolebinding
+    Kubectl create clusterrole monitoring --aggregation-rule="rbac.example.com/aggregate-to-monitoring=true"
+
+    kubectl create rolebinding
 
 1.Within the namespace "acme", grant the permissions in the "admin" ClusterRole to a user named "bob"
 
-Kubectl create rolebinding bob-admin-binding --clustertole=admin --user=bob --namespace=acme
+    Kubectl create rolebinding bob-admin-binding --clustertole=admin --user=bob --namespace=acme
 
 2.Within the namespace "acme", grant the permissions in the "view" ClusterRole to the service account in the namespace "acme" named "myapp":
 
-Kubectle create rolebinding myapp-view-binding --clusterrole=view --serviceaccount=acme:myapp --namespace=acme
+    Kubectle create rolebinding myapp-view-binding --clusterrole=view --serviceaccount=acme:myapp --namespace=acme
 
 3.Within the namespace "acme", grant the permissions in the "view" ClusterRole to a service account in the namespace "myappnamespace" named "myapp":
 
-Kubectl create rolebinding myappnamespace-myapp-view-binding --clusterrole=view --serviceaccount=myappnamespace:myapp --namespace=acme
+    Kubectl create rolebinding myappnamespace-myapp-view-binding --clusterrole=view --serviceaccount=myappnamespace:myapp --namespace=acme
 
 
-kubectl create clusterrolebinding 
+    kubectl create clusterrolebinding 
 
 Grants a ClusterRole across the entire cluster (all namespaces). Examples
 
@@ -176,12 +182,12 @@ Grants a ClusterRole across the entire cluster (all namespaces). Examples
 1.Across the entire cluster, grant the permissions in the "cluster-admin" ClusterRole to a user named "root":
 
 
-Kubectl create clusterolebinding root-cluster-admin-binding --clusterole=cluster-admin --user=root
+     Kubectl create clusterolebinding root-cluster-admin-binding --clusterole=cluster-admin --user=root
 
 
 2.Across the entire cluster, grant the permissions in the "view" ClusterRole to a service account named "myapp" in the namespace "acme":
 
-Kubectl create clusterrolebinding view-clusterrole-binding --clusterrole=view --service-account=acme:myapp
+    Kubectl create clusterrolebinding view-clusterrole-binding --clusterrole=view --service-account=acme:myapp
 
 
 
@@ -191,42 +197,41 @@ Kubectl create clusterrolebinding view-clusterrole-binding --clusterrole=view --
  # Create or Generate key for user .
 
 
- openssl genrsa -out sarvind.key 2048
+     openssl genrsa -out sarvind.key 2048
 
- openssl req -new -key sarvind.key 	-out sarvind.csr -sub “/CN=sarvind/O=dev/O=example.org”
+     openssl req -new -key sarvind.key 	-out sarvind.csr -sub “/CN=sarvind/O=dev/O=example.org”
 
- openssl x509 -req -in sarvind.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out sarvind.crt -days 730
-
+     openssl x509 -req -in sarvind.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out sarvind.crt -days 730
+ 
 O represent to groups.
 
- openssl x509 -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -days 730 -in sarvind.csr -out sarvind.crt
+     openssl x509 -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -days 730 -in sarvind.csr -out sarvind.crt
 
- kubectl config set-credentials sarvind --client-certificate=sarvind.crt  cleint-key=sarvind.key
+     kubectl config set-credentials sarvind --client-certificate=sarvind.crt  client-key=sarvind.key
 
- kubectl config get-contexts
+     kubectl config get-contexts
 
- kubectl config set-context sarvind-minikube --cluster=minikube --user=sarvind
+     kubectl config set-context sarvind-minikube --cluster=minikube --user=sarvind
 
- kubectl config get-contexts
- kubectl use-context minikube
+     kubectl config get-contexts
+     kubectl use-context minikube
 
- kubectl get pod 
+     kubectl get pod 
 
 **How to get Verbs in kubernetes of perticular resource.**
 
 
-kubectl api-resources  -o wide  | grep pod 
+     kubectl api-resources  -o wide  | grep pod 
 
- kubectl auth can-i list pods --namespace default --as sarvind
+     kubectl auth can-i list pods --namespace default --as sarvind
 
- kubectl auth can-i delete pods --namespace default -as sarvind
+     kubectl auth can-i delete pods --namespace default -as sarvind
 
- kubectl config view --minify 
+     kubectl config view --minify 
 
 
 
 # Service Accounts:
-
 
 Service Accounts are special types of users.
 You can call them as application users.
@@ -237,6 +242,6 @@ If you don’t explicitly mention  what service accounts  will be  used then all
 
 we can also create custom service account in namespace.
 
-Kubectl create sa test-sa -n test
+    Kubectl create sa test-sa -n test
 
-Kubectl get sa -n test
+    Kubectl get sa -n test
