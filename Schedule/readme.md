@@ -45,25 +45,25 @@ how  to assign labels on nodes ?
 
  kubectl get node --show-labels
 
- kubectl label node node-name disk=ssd
+      kubectl label node node-name disk=ssd
 
  **How to taint a node ?**
 
- kubectl taint node node1 env=prod:NoSchedule
+      kubectl taint node node1 env=prod:NoSchedule
 
  and 
 
- kubectl taint node node2 disk=ssd:NoExecute
+      kubectl taint node node2 disk=ssd:NoExecute
 
  and 
 
- kubectl taint node node3 env=test:PreferSchedule 
+      kubectl taint node node3 env=test:PreferSchedule 
 
  **How to untaint the node ?**
 
- kubectl taint node node1 env=prod:NoSchedule-
- kubectl taint node node2 disk=ssd:PreferSchedule-
- kubectl taint node node3 env=test:NoExecute-
+     kubectl taint node node1 env=prod:NoSchedule-
+     kubectl taint node node2 disk=ssd:PreferSchedule-
+     kubectl taint node node3 env=test:NoExecute-
 
  **Node affinity weight**
 
