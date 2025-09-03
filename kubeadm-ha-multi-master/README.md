@@ -137,7 +137,7 @@ IMPORTANT: You also need to pass --apiserver-advertise-address to the join comma
 
 
 
-$Downloading kube config to your local machine$
+# Downloading kube config to your local machine
 
 On your host machine
 
