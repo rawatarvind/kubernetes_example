@@ -1,5 +1,9 @@
 # Set up a Highly Available Kubernetes Cluster using kubeadm
 
+# Kubernetes HA Cluster with HAProxy & Keepalived
+ 
+![Cluster Diagram](./keepalive-haproxy.png)
+
 Follow this documentation to set up a highly available Kubernetes cluster using Ubuntu 20.04 LTS.
 
 This documentation guides you in setting up a cluster with three master nodes, one worker node and two load balancer nodes using Keepalived & HAProxy.
