@@ -39,37 +39,37 @@ Host machine has atleast 16G memory
 
 **Bring up all the virtual machines**
 
-   vagrant up
+      vagrant up
 
 If you are on Linux host and want to use KVM/Libvirt
 
-  vagrant up --provider libvirt
+      vagrant up --provider libvirt
 
 # Set up load balancer nodes (loadbalancer1 & loadbalancer2)
 
 **Install Keepalived & Haproxy**
   
-   apt update && apt install -y keepalived haproxy
+      apt update && apt install -y keepalived haproxy
 
 **configure keepalived**
 
 On both nodes create the health check script /etc/keepalived/check_apiserver.sh
 
-   cat >> /etc/keepalived/check_apiserver.sh <<EOF
-   #!/bin/sh
+        cat >> /etc/keepalived/check_apiserver.sh <<EOF
+        #!/bin/sh
 
-   errorExit() {
-    echo "*** $@" 1>&2
-    exit 1
-  }
+        errorExit() {
+        echo "*** $@" 1>&2
+        exit 1
+        }
 
-  curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
-  if ip addr | grep -q 172.16.16.100; then
-    curl --silent --max-time 2 --insecure https://172.16.16.100:6443/ -o /dev/null || errorExit "Error GET https://172.16.16.100:6443/"
-  fi
-  EOF
+        curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
+        if ip addr | grep -q 172.16.16.100; then
+        curl --silent --max-time 2 --insecure https://172.16.16.100:6443/ -o /dev/null || errorExit "Error GET https://172.16.16.100:6443/"
+        fi
+        EOF
 
-  chmod +x /etc/keepalived/check_apiserver.sh
+        chmod +x /etc/keepalived/check_apiserver.sh
 
 Create keepalived config /etc/keepalived/keepalived.conf
 
@@ -132,17 +132,17 @@ Update /etc/haproxy/haproxy.cfg
 
 **Enable & restart haproxy service**
 
-   systemctl enable haproxy && systemctl restart haproxy
+      systemctl enable haproxy && systemctl restart haproxy
 
 **Pre-requisites on all kubernetes nodes (masters & workers)**
 
 Disable swap
 
-swapoff -a; sed -i '/swap/d' /etc/fstab
+       swapoff -a; sed -i '/swap/d' /etc/fstab
 
 Disable Firewall
 
-systemctl disable --now ufw
+        systemctl disable --now ufw
 
 Enable and Load Kernel modules
 
@@ -197,13 +197,13 @@ Install Kubernetes components
 
 Initialize Kubernetes Cluster
 
-  kubeadm init --control-plane-endpoint="172.16.16.100:6443" --upload-certs --apiserver-advertise-address=172.16.16.101 --pod-network-cidr=192.168.0.0/16
+      kubeadm init --control-plane-endpoint="172.16.16.100:6443" --upload-certs --apiserver-advertise-address=172.16.16.101 --pod-network-cidr=192.168.0.0/16
 
 Copy the commands to join other master nodes and worker nodes.
 
 Deploy Calico network
 
-  kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml
+      kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml
 
 
 # Join other master nodes to the cluster
@@ -219,12 +219,12 @@ Deploy Calico network
 # Downloading kube config to your local machine
 On your host machine
 
-  mkdir ~/.kube
-  scp root@172.16.16.101:/etc/kubernetes/admin.conf ~/.kube/config
+       mkdir ~/.kube
+       scp root@172.16.16.101:/etc/kubernetes/admin.conf ~/.kube/config
 
 Password for root account is kubeadmin (if you used my Vagrant setup)
 
 # Verifying the cluster
    
-   kubectl cluster-info
-   kubectl get nodes
+        kubectl cluster-info
+        kubectl get nodes
