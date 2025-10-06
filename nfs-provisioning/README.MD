@@ -58,15 +58,19 @@ Deploy the NFS Subdir External Provisioner in your Kubernetes cluster to automat
     helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
 
 **Install Helm Chart for NFS**
-    helm install nfs-subdir-external-provisioner \
-    nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
-    -n monitoring \
-    --create-namespace \
-    --set nfs.server=10.77.1.212 \
-    --set nfs.path=/home/sarvind/nfs \
-    --set storageClass.onDelete=true
+      helm install nfs-subdir-external-provisioner \
+      nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+      -n monitoring \
+      --create-namespace \
+      --set nfs.server=10.77.1.212 \
+      --set nfs.path=/home/sarvind/nfs \
+      --set storageClass.onDelete=true
 
 **Check pods and storage classes:**
 
-    kubectl get pod
-    kubectl get sc   
+    kubectl get pod -n monitoring
+    kubectl get sc -n monitoring
+
+**NFS dynamic storage class was installed and “nfs-client” storage was created.**
+
+kubectl apply -f nfs-pvc.yaml
