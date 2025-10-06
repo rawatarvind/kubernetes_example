@@ -58,6 +58,8 @@ Deploy the NFS Subdir External Provisioner in your Kubernetes cluster to automat
     helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
 
 **Install Helm Chart for NFS**
+     
+     
         helm install nfs-subdir-external-provisioner \
         nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
         -n monitoring \
@@ -79,4 +81,4 @@ Deploy the NFS Subdir External Provisioner in your Kubernetes cluster to automat
     kubectl get pvc -n monitoring
     kubectl get pod -n monitoring
 
-    
+
