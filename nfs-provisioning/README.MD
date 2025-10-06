@@ -4,7 +4,7 @@ Dynamic NFS Storage Provisiong in Kubernetes streamlines the creation and manage
 The NFS provisoner dynamically creates persisten volume (PVs) and associates them with Persistent Volume claim (PVCs), making the process more efficient.
 If you have an External NFS share and want to use it in a pod or deployment, the nfs-subdir-external-provisioner provides the solution for effortlessly setting up a storage class to automate the management of your persistent volumes.
 
-     ![NFS Provisioning](./NFS_Provisioning.png)
+![NFS Provisioning](./NFS_Provisioning.png)
 
 
 **Prerequisites**
