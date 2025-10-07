@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      containers:
+      - env:
+        - name: PROVISIONER_NAME
+          value: nfs-storage     #StorageClass Provisoner Name
+        - name: NFS_SERVER
+          value: 10.77.1.212   #NFS server IP
+        - name: NFS_PATH
+          value: /data/nfs  #NFS Mount directory
+        image: gcr.io/k8s-staging-sig-storage/nfs-subdir-external-provisioner:v4.0.0
+        name: nfs-client-provisioner
+        resources:
+          limits:
+            cpu: "1"
+            memory: 850Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
+        volumeMounts:
+        - mountPath: /persistentvolumes
+          name: nfs-client-root
+      serviceAccountName: nfs-client-provisioner
+      volumes:
+      - name: nfs-client-root
+        nfs:
+          path: /mnt/nfs_share
+          server: 10.77.1.212

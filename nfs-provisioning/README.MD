@@ -84,3 +84,37 @@ Deploy the NFS Subdir External Provisioner in your Kubernetes cluster to automat
     kubectl get pod -n monitoring
 
 
+# Dynamic NFS Provisioning For Persistence Storage without Helm 
+
+We have configured NFS Provisioning with help of helm, now we will configure without helm.
+
+
+**Install and Configure NFS Client Provisioner**
+
+We will deploy the NFS Client Provisioner to automate the creation and management of NFS-backed Persistent Volumes (PVs) in your Kubernetes cluster. This provisioner enables dynamic provisioning of PVs using the NFS server you’ve set up.
+
+**Create Storage Class for Dynamic PV Provisioning**
+
+Storage Class defines the provisioning behavior for dynamically created PVs. We will create a storage class called nfs-storage that the NFS client provisioner will use.
+
+     kubectl apply -f nfs-storage.yaml 
+     kubectl get sc 
+
+**NFS Client Provisioner Deployment**
+
+Next, we deploy the NFS client provisioner that will interact with the NFS server to provision PVs automatically. Use the following YAML configuration:
+
+     kubectl apply -f nfs-client-provisioning.yaml
+     kubectl get pod
+
+**Create a Service Account with Required Permissions**
+
+The NFS client provisioner needs a service account with permission to interact with Kubernetes resources. We will create the necessary permissions using ClusterRole and ClusterRoleBinding.
+
+To ensure the provisioner works correctly and avoids conflicts, we configure leader election using the Role and RoleBinding resources.
+   
+     kubectl create -f rbac.yaml
+     kubectl get clusterrole | grep -i nfs-client-provisioner-runner
+
+
+
