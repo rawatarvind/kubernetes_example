@@ -1,0 +1,7 @@
+# This file must exist and contain the variables for the fix to work.
+repo_file: /etc/apt/sources.list.d/kubernetes.list
+kubernetes_version: 1.32.0-1.1
+repo_version: v1.31
+new_repo_version: v1.32
+kubeconfig_path: /home/sarvind/.kube/config
+kubectl_binary_path: /home/sarvind/.local/bin/kubectl

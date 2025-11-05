@@ -1,0 +1,8 @@
+- name: 1. installation Kubernetes  (One by One)
+  hosts: all
+  become: true
+  serial: 1 
+  roles:
+    - k8s_installation # Logic in roles/k8s_upgrade/tasks/main.yml
+
+

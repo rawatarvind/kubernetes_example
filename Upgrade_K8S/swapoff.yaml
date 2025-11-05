@@ -1,0 +1,21 @@
+---
+- name: Disable swap on all nodes
+  hosts: all
+  become: yes
+  tasks:
+    - name: Disable swap immediately
+      command: swapoff -a
+
+    - name: Remove swap entry from /etc/fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*swap.*)$'
+        replace: '# \1'
+
+    - name: Verify swap is off
+      command: free -h
+      register: swap_status
+
+    - debug:
+        var: swap_status.stdout_lines
+

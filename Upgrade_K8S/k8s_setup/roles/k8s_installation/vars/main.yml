@@ -1,0 +1,4 @@
+#kubernetes_version:    # Specify the exact version you need
+Dir: /etc/apt/keyrings
+keyring_path: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+repo_url: https://pkgs.k8s.io/core:/stable:/v1.30/deb/

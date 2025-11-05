@@ -1,0 +1,24 @@
+---
+# -----------------------------------------------------------
+# STAGE 1: Control Plane Upgrade (Master Nodes)
+# -----------------------------------------------------------
+- name: 1. Upgrade Kubernetes Master Nodes (One by One)
+  hosts: master_nodes
+  become: true
+  serial: 1 # Critical for rolling master upgrade
+  roles:
+    - k8s_upgrade # Logic in roles/k8s_upgrade/tasks/main.yml
+
+# -----------------------------------------------------------
+# STAGE 2: Worker Node Upgrade (Worker Nodes)
+# -----------------------------------------------------------
+- name: 2. Upgrade Kubernetes Worker Nodes (One by One)
+  hosts: worker_nodes
+  become: true
+  serial: 1 # Critical for rolling worker upgrade
+  # Inject variables from the master upgrade role's vars file so workers can use them.
+  vars_files:
+    - roles/k8s_upgrade/vars/main.yaml
+  roles:
+    - k8s_worker_upgrade # Logic in roles/k8s_worker_upgrade/tasks/main.yml
+

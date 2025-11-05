@@ -1,0 +1,102 @@
+- name: Step 1 . Update cache in all nodes 
+  ansible.builtin.apt:
+    name: 
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+      - containerd
+    state: present
+    update_cache: yes
+  notify: Restart containerd
+
+- name: Step 2. Ensure swap is disabled permanently
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '(^[^#].*\bswap\b.*$)'
+    replace: '# \1'
+  register: swap_disable_result
+
+- name: Step 3. disable swap immediately
+  ansible.builtin.command: swapoff -a 
+
+- name: Step 4. Verify swap is off
+  ansible.builtin.command: free -h
+  register: swap_status 
+
+- debug:
+     var: swap_status.stdout_lines
+
+- name: Step 5. Disable firewall services 
+  ansible.builtin.service:
+    name: ufw
+    state: stopped 
+    enabled: false
+  tags: ufw
+
+- name: Step 6. Check if directory exists
+  ansible.builtin.stat:
+    path: {{ Dir }}
+  register: dir_check
+
+- name: Step 7 . Create directory if it does not exist
+  ansible.builtin.file:
+    path: {{ Dir }}
+    state: directory 
+    mode: '0755'
+  when: not dir_check.stat.exists
+
+- name: Step 8 .  Download and install Kubernetes GPG key
+  ansible.builtin.shell: |
+     curl -fsSL {{ repo_url }}Release.key | gpg --dearmor -o {{ keyring_path }}
+  args:
+    creates: "{{ keyring_path }}"
+
+- name: Step 9. Add Kubernetes APT repository
+  ansible.builtin.template:
+    src: templates/kubernetes.list.j2
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Step 10. update APT cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Step 11. make Dir for containerd
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+    mode: '0755'
+
+- name: Step 12.  Generate default containerd configuration file
+  command: containerd config default
+  register: containerd_default_config
+  changed_when: false
+
+- name: Step 13. Write containerd configuration to /etc/containerd/config.toml
+  copy:
+    dest: /etc/containerd/config.toml
+    content: "{{ containerd_default_config.stdout }}"
+  notify: Restart containerd
+
+
+- name: Step 14. nstall kubeadm, kubelet, kubectl
+  ansible.builtin.apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+    update_cache: yes
+- name: Hold kube packages (prevent auto upgrade)
+  ansible.builtin.apt:
+    name:
+      - kubeadm
+      - kubectl
+      - kubelet
+    state: held
+
+

@@ -1,0 +1,55 @@
+
+# The serial: 1 directive in the calling playbook ensures this runs on one worker at a time.
+- name: Step W1 - Update repolist for new version
+  ansible.builtin.replace:
+    path: "{{ repo_file }}"
+    regexp: "{{ repo_version }}"
+    replace: "{{ new_repo_version }}"
+  register: repo_change
+  tags: [prep_repo]
+
+- name: Step W2 - Update apt cache if repository changed
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Step W3 - Drain and Cordon the Current Worker Node
+  # This delegates the kubectl command to the Ansible control host (localhost)
+  delegate_to: localhost
+  environment:
+    KUBECONFIG: "{{ kubeconfig_path }}"
+  ansible.builtin.command: "{{ kubectl_binary_path }} drain {{ inventory_hostname }} --ignore-daemonsets"
+  ignore_errors: yes
+  tags: [drain_uncordon]
+
+- name: Step W4 - Unhold kubeadm, kubelet, kubectl packages
+  become: true
+  ansible.builtin.shell: |
+    apt-mark unhold kubeadm kubelet kubectl
+  register: unhold_result
+  failed_when: unhold_result.rc != 0 and 'was not set to hold' not in unhold_result.stderr
+  changed_when: "'Canceled hold' in unhold_result.stdout"
+  tags: [install_pkgs]
+
+- name: Step W5 - Upgrade the kubeadm, kubelet, and kubectl packages
+  ansible.builtin.apt:
+    name:
+      - "kubelet={{ kubernetes_version }}"
+      - "kubectl={{ kubernetes_version }}"
+    state: present
+    allow_downgrade: yes
+  notify: restart kubelet # <-- Notify handler after installation
+  tags: [install_pkgs]
+
+- name: Step W6 - Run 'kubeadm upgrade node' on the worker
+  ansible.builtin.command: "kubeadm upgrade node --ignore-preflight-errors=all"
+  # This task mainly updates local certificates and configuration.
+  tags: [upgrade_node]
+
+- name: Step W7 - Uncordon the current worker node
+  delegate_to: localhost
+  environment:
+    KUBECONFIG: "{{ kubeconfig_path }}"
+  ansible.builtin.command: "{{ kubectl_binary_path }} uncordon {{ inventory_hostname }}"
+  ignore_errors: yes
+  tags: [drain_uncordon]
+

@@ -1,0 +1,78 @@
+
+    # --------------------------------------------------------------------------
+    # STAGE 1: Preparation (Run on every node before its upgrade turn)
+    # --------------------------------------------------------------------------
+
+    - name: Step 1 - update repolist for new version
+      ansible.builtin.replace:
+        path: "{{ repo_file }}"
+        regexp: "{{ repo_version }}"
+        replace: "{{ new_repo_version }}"
+      register: repo_change
+
+    - name: Step 2 - update apt cache if repository changed
+      ansible.builtin.apt:
+        update_cache: yes
+      when: repo_change is changed
+
+    - name: Step 3 - Unhold kubeadm, kubelet, kubectl packages
+      ansible.builtin.shell: apt-mark unhold kubeadm kubelet kubectl
+      register: unhold_result
+      failed_when: unhold_result.rc != 0 and 'was not set to hold' not in unhold_result.stderr
+      changed_when: "'Canceled hold' in unhold_result.stdout"
+
+    - name: Step 4 - Install new version of kubeadm (must be done before 'upgrade apply')
+      ansible.builtin.apt:
+        name: "kubeadm={{ kubernetes_version }}"
+        state: present
+        allow_downgrade: yes
+
+
+    # --------------------------------------------------------------------------
+    # STAGE 2: Control Plane Leader Upgrade (Only runs on the first master)
+    # --------------------------------------------------------------------------
+
+    - name: Step 5 - Plan control plane upgrade (first master only)
+      ansible.builtin.command: "kubeadm upgrade plan --ignore-preflight-errors=all"
+      register: upgrade_plan
+      changed_when: false 
+      when: inventory_hostname == groups['master_nodes'][0]
+      
+    - name: Step 6 - Apply the control plane upgrade (first master only)
+      ansible.builtin.command: "kubeadm upgrade apply v{{ kubernetes_version | regex_replace('-.*','') }} -y --ignore-preflight-errors=CoreDNSUnsupportedPlugins,CoreDNSMigration"
+      when: inventory_hostname == groups['master_nodes'][0]
+
+    # --------------------------------------------------------------------------
+    # STAGE 3: Node-by-Node Upgrade (Serialized)
+    # --------------------------------------------------------------------------
+
+    - name: Step 7 - Drain and Cordon the Current Master Node
+      delegate_to: localhost
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+      ansible.builtin.command: "{{ kubectl_binary_path }} drain {{ inventory_hostname }} --ignore-daemonsets"
+      ignore_errors: yes # Ignore errors if the node is already cordoned/draining or has 
+
+    - name: Step 8 - Upgrade follower node components (runs on remaining masters)
+      ansible.builtin.command: "kubeadm upgrade node --ignore-preflight-errors=all"
+      when: inventory_hostname != groups['master_nodes'][0]
+
+    - name: Step 9 - Install new kubelet & kubectl packages (All Masters)
+      ansible.builtin.apt:
+        name:
+          - "kubelet={{ kubernetes_version }}"
+          - "kubectl={{ kubernetes_version }}"
+        state: present
+        allow_downgrade: yes
+      notify: restart kubelet
+
+
+
+    - name: Step 11 - Uncordon the current master node
+      delegate_to: localhost
+      environment:
+        KUBECONFIG: "{{ kubeconfig_path }}"
+      # Use the variable for the binary path
+      ansible.builtin.command: "{{ kubectl_binary_path }} uncordon {{ inventory_hostname }}"
+      ignore_errors: yes # Ignore errors if the node is already uncordoned
+

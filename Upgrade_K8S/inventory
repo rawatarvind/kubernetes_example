@@ -1,0 +1,16 @@
+[loadbalancer]
+
+loadbalancer ansible_host=172.16.16.100
+
+[master_nodes]
+
+kmaster1 ansible_host=172.16.16.101
+kmaster2 ansible_host=172.16.16.102
+kmaster3 ansible_host=172.16.16.103
+
+
+[worker_nodes]
+
+kworker1 ansible_host=172.16.16.201
+kworker2 ansible_host=172.16.16.202
+kworker3 ansible_host=172.16.16.203
